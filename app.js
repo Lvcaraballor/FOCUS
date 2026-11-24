@@ -319,6 +319,10 @@ function setFilterTab() {
 }
 
 async function createPlan(reorganize = false) {
+  if (window.FOCUS_STATIC_HOSTING) {
+    showToast("La planificación con IA requiere un servidor y no está disponible en GitHub Pages.");
+    return;
+  }
   const today = dateOffset(0);
   const pending = tasks.filter((task) => !task.done && (task.date <= today || task.plannedDate === today));
   if (!pending.length) {

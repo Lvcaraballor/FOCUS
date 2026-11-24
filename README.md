@@ -77,7 +77,9 @@ El servidor no almacena las solicitudes del planificador ni del asistente. Antes
 ├── AGENTS.md             # Guía permanente para agentes de programación
 ├── README.md             # Documentación del proyecto
 ├── app.js                # Interacciones y estado de la interfaz
+├── build-pages.js        # Genera la publicación estática en docs/
 ├── features.js           # Calendario, Kanban y módulos locales de organización
+├── docs/                 # Salida estática para publicar con GitHub Pages
 ├── focus-video-mockup.mp4 # Video ilustrativo de la experiencia de FOCUS (30 s)
 ├── index.html            # Estructura de la aplicación
 ├── package.json          # Scripts y requisito de Node.js
@@ -107,7 +109,21 @@ Para ejecutar las pruebas:
 npm test
 ```
 
-## 10. Variables de entorno
+## 10. Publicación estática con GitHub Pages
+
+Genera el sitio publicable en `docs/` con:
+
+```bash
+npm run build:pages
+```
+
+En GitHub, abre **Settings → Pages**, elige **Deploy from a branch**, selecciona la rama `main` y la carpeta `/docs`, y guarda. La aplicación estará disponible en la URL que GitHub Pages indique. Si publicas desde otra rama, selecciónala en esa configuración.
+
+Esta salida es estática: tareas, disponibilidad y módulos locales funcionan en el navegador y se guardan en `localStorage`. GitHub Pages no ejecuta `server.js` ni los endpoints `/api/plan` y `/api/assistant`; por eso la planificación, el asistente y el modo de emergencia con IA se deshabilitan en esa publicación. Los datos no se envían al intentar usar esas acciones. Para IA se necesita un servidor aparte con esos endpoints y una clave privada; no se debe poner la clave en GitHub Pages.
+
+Vuelve a ejecutar el comando después de cambiar archivos del cliente para actualizar `docs/`.
+
+## 11. Variables de entorno
 
 `.env.example` es una referencia de configuración; Node.js no carga automáticamente archivos `.env`. Define las variables en el entorno de ejecución o mediante el gestor de secretos de tu plataforma.
 
@@ -135,7 +151,7 @@ npm start
 
 No escribas claves reales en archivos versionados, en `app.js`, en el HTML ni en solicitudes del navegador. Si la clave no está configurada, las páginas siguen disponibles y el endpoint de planificación devuelve un error explícito.
 
-## 11. Integración prevista con Supabase
+## 12. Integración prevista con Supabase
 
 Supabase **todavía no está integrado**. La aplicación usa almacenamiento local, no tiene autenticación, base de datos remota ni sincronización multi-dispositivo.
 
@@ -150,7 +166,7 @@ Una integración futura debería contemplar:
 
 No se deben añadir el SDK ni credenciales de Supabase hasta que la integración se implemente y se documenten sus variables de entorno.
 
-## 12. Integración con inteligencia artificial
+## 13. Integración con inteligencia artificial
 
 El navegador envía las tareas pendientes, sus fechas límite y la disponibilidad al endpoint local `POST /api/plan`. `server.js` valida la solicitud y delega en `planner.js`, que crea instrucciones en español para que el modelo:
 
@@ -165,7 +181,7 @@ La planificación requiere `OPENAI_API_KEY`. Si falta o el proveedor falla, se m
 
 El asistente de recomendaciones utiliza `POST /api/assistant` y la misma clave del servidor. Después de pedir confirmación, envía la pregunta, hasta seis mensajes previos, el horario disponible, nombres y fechas objetivo de hasta 20 proyectos, y hasta 30 tareas pendientes con sus títulos, categorías, prioridades, fechas límite, duración y estado. No envía descripciones, notas ni gastos. La respuesta se limita a texto breve y consejos: no puede modificar tareas ni calendarios. El modo de emergencia vuelve a usar el planificador validado de `POST /api/plan`; no cambia fechas límite ni tareas completadas. Sin `OPENAI_API_KEY`, ambos servicios muestran un error explícito.
 
-## 13. Despliegue en Vercel
+## 14. Despliegue en Vercel
 
 El despliegue completo en Vercel **está pendiente**. El proyecto actual usa `server.js` como servidor Node persistente para desarrollo local; Vercel espera funciones serverless para endpoints como `/api/plan` y `/api/assistant`. No hay todavía `vercel.json` ni funciones serverless.
 
@@ -179,7 +195,7 @@ Para desplegar la aplicación completa:
 
 Hasta completar esa adaptación, `npm start` es el método de ejecución soportado. Un despliegue estático por sí solo no incluye el endpoint de IA.
 
-## 14. Estado actual y funcionalidades pendientes
+## 15. Estado actual y funcionalidades pendientes
 
 **Implementado:** dashboard, tareas CRUD, fechas límite y prioridades, disponibilidad diaria, persistencia local, temporizador, calendarios semanal y mensual, tablero Kanban, hábitos, notas, bloques de tiempo con validación de solapamientos, gastos e ingresos locales, estadísticas de actividad, objetivos, proyectos, recordatorios en primer plano, recomendaciones con IA sujetas a confirmación, endpoint de planificación con validación estricta y modo de emergencia.
 
@@ -195,7 +211,7 @@ Hasta completar esa adaptación, `npm start` es el método de ejecución soporta
 
 Las funcionalidades pendientes no deben describirse como disponibles hasta que se implementen y prueben.
 
-## 15. Video de demostración
+## 16. Video de demostración
 
 [Ver o descargar el mockup de FOCUS](./focus-video-mockup.mp4) (MP4, 30 segundos, 1600 × 900).
 
