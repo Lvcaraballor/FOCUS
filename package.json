@@ -1,0 +1,13 @@
+{
+  "name": "focus-organizador",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Organizador de actividades con planificación asistida por IA",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
