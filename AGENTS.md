@@ -13,6 +13,7 @@ El estado actual es un prototipo funcional: el cliente guarda tareas, disponibil
 ## 2. Arquitectura
 
 - **Cliente:** `index.html`, `styles.css`, `app.js` y `features.js`. Administra tareas, disponibilidad, vistas de organización y datos locales; solicita confirmación antes de enviar contexto al proveedor de IA.
+- **Publicación estática:** `npm run build:pages` copia los recursos del cliente a `docs/` para GitHub Pages; las funciones que requieren los endpoints de IA se deshabilitan en esa salida.
 - **Servidor local:** `server.js` sirve archivos estáticos y recibe `POST /api/plan` y `POST /api/assistant`. La clave del proveedor de IA se lee desde variables de entorno del servidor.
 - **Planificador:** `planner.js` valida solicitudes y respuestas, prepara instrucciones de planificación y asesoramiento.
 - **Pruebas:** `test/planner.test.js` y `test/assistant.test.js` usan `node:test`.
@@ -36,6 +37,8 @@ Para Vercel, el servidor HTTP local no sustituye una función serverless. No pre
 | `index.html` | Estructura semántica, controles, formularios y puntos de montaje de UI |
 | `styles.css` | Paleta, componentes visuales, estados y media queries |
 | `app.js` | Estado y eventos del cliente, CRUD, filtros, disponibilidad, temporizador y llamada a IA |
+| `build-pages.js` | Genera la versión estática publicable en `docs/` |
+| `docs/` | Salida generada para GitHub Pages; no editar manualmente |
 | `features.js` | Calendario, Kanban, hábitos, notas, bloques, gastos, objetivos, proyectos, estadísticas, recordatorios y asistente |
 | `server.js` | Servidor de desarrollo, archivos estáticos y endpoints `/api/plan` y `/api/assistant` |
 | `planner.js` | Validación de solicitudes, prompts y respuestas del modelo |
